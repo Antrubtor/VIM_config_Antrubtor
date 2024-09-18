@@ -6,6 +6,11 @@ This repository contains my customized Vim configuration, including keyboard sho
 
 Before using this configuration, ensure you have the following installed:
 
+- **vundle vim**: Plugin manager.
+  ```
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  ```
+
 - **clang-format**: Used for file formatting.
   ```
   sudo apt install clang-format
