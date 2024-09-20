@@ -21,6 +21,16 @@ Before using this configuration, ensure you have the following installed:
   sudo apt-get install exuberant-ctags
   ```
 
+- **vim-lsp dependencies**: Required for proper functioning of VIM-LSP.
+  ```
+  sudo apt install nodejs npm cargo clangd
+  ```
+
+- **c/cpp usages**: Required for proper functioning of termdebug.
+  ```
+  sudo apt install gdb
+  ```
+
 - **JetBrains Mono Nerd Font**: This font (`JetBrainsMonoNerdFontMono-Bold.ttf`) is required for powerline symbols. Find the font file in the repository and install it.
 
 ## Keyboard Shortcuts

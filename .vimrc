@@ -1,4 +1,4 @@
-" + is for tab resizing
+
 " F12 is for ALE enabling/disabling
 " T is for terminal (crtl + w - N for normal mode)
 " crtl + t is for nerdtree
@@ -7,15 +7,25 @@
 " C + j for format all code
 " select and = for format a part of code
 
-" F4 to enable autocompletion
-" F5 to disable autocompletion
+" \re to rename a variable
+" \co to show error suggestion
 
 " :Man <code> to use man directly in vim
 
 " F6 enable / disable background
 
 " , to comment
-" . ton uncomment
+" . to uncomment
+
+" crtl + up/down arrwo to change buffer
+" crtl + right/left to arrow changes tabs
+
+" crtl + g to open GDB
+
+" crtl + click to go on variable/function declaration
+
+" crtl + e to find function (and crtl+j/k to move between result)
+" crtl + shift + e to find file
 
 " General =====================================================================================================
 set encoding=utf-8
@@ -37,6 +47,7 @@ set lazyredraw " For performence
 set list listchars=tab:>.,trail:~,extends:>,precedes:<
 highlight SpecialKey ctermfg=blue
 packadd termdebug " Turn on GDB in vim
+set mousemodel=popup " For mouse moving windows
 " resize split automatically
 autocmd VimResized * wincmd =
 
@@ -73,25 +84,29 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 " Plugin list ------------------------------------------------------------------------------
-Plugin 'dracula/vim', { 'name': 'dracula' }
+Plugin 'ghifarit53/tokyonight-vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'https://github.com/tpope/vim-fugitive.git'
-Plugin 'dense-analysis/ale'
-Plugin 'wakatime/vim-wakatime'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'preservim/tagbar'
 Plugin 'preservim/nerdtree' |
             \ Plugin 'Xuyuanp/nerdtree-git-plugin' |
             \ Plugin 'ryanoasis/vim-devicons' |
             \ Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocompletion
 Plugin 'vim-scripts/AutoComplPop'
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'vim-utils/vim-man'
-Plugin 'vim-syntastic/syntastic'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'preservim/nerdcommenter'
+Plugin 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' } " Searchbar
+Plugin 'prabirshrestha/vim-lsp' " language server plugin
+Plugin 'mattn/vim-lsp-settings'
+Plugin 'prabirshrestha/asyncomplete.vim' " Autocomplete with lsp
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+
+" Plugin 'wakatime/vim-wakatime'
+" Plugin 'vimsence/vimsence'
 " Plugin list end --------------------------------------------------------------------------
 
 " All of your Plugins must be added before the following line
@@ -111,7 +126,12 @@ filetype plugin on
 
 
 " Plugin config ----------------------------------------------------------------------------
-colorscheme dracula
+
+" ~~~Theme config~~~
+set termguicolors
+let g:tokyonight_enable_italic = 1
+let g:tokyonight_style = 'night'
+colorscheme tokyonight
 
 " ~~~Nerdtree config~~~
 noremap <C-t> :NERDTreeToggle<cr>
@@ -129,6 +149,10 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
 let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
 
+" ~~~Leaderf config~~~
+noremap <C-e> :Leaderf function<CR>
+noremap <C-s-e> :Leaderf file<CR>
+let g:Lf_WindowPosition = 'popup'
 
 " ~~~Airline config~~~
 let g:gitgutter_enabled = 1
@@ -154,63 +178,71 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" unicode symbols
-
-"let g:airline_symbols.crypt = ' '
-"let g:airline_symbols.maxlinenr = ' '
-"let g:airline_symbols.spell = '✓ '
-"let g:airline_symbols.notexists = ''
-"let g:airline_symbols.dirty = ': '
-"let g:airline_symbols.colnr = ' :'
-
-"       
 
 
-" ~~~ALE config~~~
-let g:ale_enabled = 0
-let g:ale_virtualenv_dir_names = []
-let g:ale_lint_on_enter = 0
-let g:ale_set_highlights = 0
-
-let g:ALEIsEnabled = 0
-"Enable ALE when F12 pressed
-function! ToggleALE()
-    ALEToggle
-    if g:ALEIsEnabled
-        let g:ALEIsEnabled = 0
-        echom 'ALE is now disabled'
-    else
-        let g:ALEIsEnabled = 1
-        echom 'ALE is now enabled'
-    endif
+" ~~~VIM LSP config~~~
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
 endfunction
-nnoremap <F12> :call ToggleALE()<CR>
+
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 
+" Asyncomplete config
+let g:asyncomplete_auto_popup = 1  " Active le popup automatique des suggestions
+let g:asyncomplete_timer_cycle = 50  " Temps d'attente avant d'afficher les suggestions (en ms)
+let g:asyncomplete_remove_duplicates = 1
+let g:asyncomplete_smart_completion = 1
+let g:lsp_document_highlight_enabled= 1 " don't highlight references to the symbol under the cursor
+highlight lspReference ctermbg=black guibg=black
+let g:lsp_diagnostics_echo_cursor = 1
+let g:asyncomplete_auto_completeopt = 0
+let g:lsp_diagnostics_enabled = 1 " lsp error/warning
+let g:lsp_diagnostic_highlights_insert_mode_enabled = 0 " Remove popup of the error
+let g:lsp_diagnostics_signs_insert_mode_enabled = 0
+let g:lsp_diagnostics_virtual_text_align = "after"
+let g:lsp_diagnostics_virtual_text_prefix = ">"
+let g:lsp_diagnostics_padding_left = 3
+
+" let g:lsp_diagnostics_signs_priority_map = {
+"             \'LspError': 11,
+"             \'LspWarning': 0,
+"             \'clangd_LspWarning': 0,
+"             \'clangd_LspInformation': 0
+"             \}
+set signcolumn=yes " always show sign column (right)
 
 
+" Click to go on declaration (funcion, variable...)
+nnoremap <C-LeftMouse> <Leftmouse>:LspDefinition<CR>
+inoremap <C-LeftMouse> <Leftmouse><Esc>:LspDefinition<CR>i
 
 
-" ~~~Autocompletion config~~~
-set complete+=kspell,d
-set completeopt=menuone,popup
-set shortmess+=c
+" Register LSP for asyncomplet
+augroup asyncomplete_setup
+    autocmd!
+    autocmd User lsp_setup call asyncomplete#register_source({
+        \ 'name': 'lsp',
+        \ 'priority': 10,
+        \ 'allowlist': ['python', 'c', 'cpp'],
+        \ 'completor': function('asyncomplete#sources#lsp#completor'),
+    \ })
+augroup END
 
-" Better completion experience
-set completeopt=menuone,noinsert,noselect
+let g:asyncomplete_auto_completeopt = 0
+set completeopt=menuone,noinsert,noselect,preview " Show if 1 suggest, no auto insert, no auto select
 
-" ~~~AutoComplPop ACP config~~~
-" Enable ACP at the start
-let g:acp_enableAtStartup = 1
+" Remap tab and shift+tab for suggest
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
-" Enable completion menu
-map <F5> :AcpEnable<CR>
 
-" Disable completion menu
-map <F4> :AcpDisable<CR>
-
-" Enter to select in completion menu
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+nmap <buffer> <Leader>co :LspCodeAction <CR>
+nmap <buffer> <Leader>re :LspRename <CR>
 
 
 " ~~~Clang config~~~
@@ -221,8 +253,6 @@ let g:clang_format#style_options = {
 \ 'ColumnLimit': 80,
 \ 'BreakBeforeBraces': 'Allman',
 \ }
-
-
 
 
 " ~~~nerdcommenter config~~~
@@ -283,12 +313,16 @@ set showcmd
 set cmdheight=1
 autocmd CursorMoved * echon "" | redraw
 
+" Switch tabs with arrow
+nnoremap <C-Left> gT
+nnoremap <C-Right> gt
 
-
+" Switch buffer with arrow
+nnoremap <C-Up> :bprevious <cr>
+nnoremap <C-Down> :bnext <cr>
 
 
 " ___Terminal mode macro___
-
 
 function! OpenAndPlaceTerminalLeft()
     " Open the Vim terminal
@@ -303,6 +337,8 @@ endfunction
 nnoremap T :call OpenAndPlaceTerminalLeft()<CR>
 
 
+" ___Open GDB macro___
+autocmd FileType c,cpp nnoremap <C-g> :Termdebug<CR><C-w>k<C-w>k<C-w>H<CR><C-w>l
 
 
 " ___Background change macro___
