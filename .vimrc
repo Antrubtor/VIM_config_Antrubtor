@@ -1,4 +1,3 @@
-
 " F12 is for ALE enabling/disabling
 " T is for terminal (crtl + w - N for normal mode)
 " crtl + t is for nerdtree
@@ -24,8 +23,10 @@
 
 " crtl + click to go on variable/function declaration
 
-" crtl + e to find function (and crtl+j/k to move between result)
-" crtl + shift + e to find file
+" crtl + k to find function (and crtl+j/k to move between result)
+" crtl + f to find file
+
+
 
 " General =====================================================================================================
 set encoding=utf-8
@@ -97,6 +98,7 @@ Plugin 'preservim/nerdtree' |
 " Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " Autocompletion
 Plugin 'vim-scripts/AutoComplPop'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'vim-utils/vim-man'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'preservim/nerdcommenter'
 Plugin 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' } " Searchbar
@@ -149,11 +151,6 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 let g:NERDTreeHighlightFolders = 1 " enables folder icon highlighting using exact match
 let g:NERDTreeHighlightFoldersFullName = 1 " highlights the folder name
 
-" ~~~Leaderf config~~~
-noremap <C-e> :Leaderf function<CR>
-noremap <C-s-e> :Leaderf file<CR>
-let g:Lf_WindowPosition = 'popup'
-
 " ~~~Airline config~~~
 let g:gitgutter_enabled = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -179,17 +176,15 @@ if !exists('g:airline_symbols')
 endif
 
 
-
 " ~~~VIM LSP config~~~
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-endfunction
+" function! s:on_lsp_buffer_enabled() abort
+"     setlocal omnifunc=lsp#complete
+" endfunction
 
-augroup lsp_install
-    au!
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
+" augroup lsp_install
+"     au!
+"     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+" augroup END
 
 " Asyncomplete config
 let g:asyncomplete_auto_popup = 1  " Active le popup automatique des suggestions
@@ -247,12 +242,13 @@ nmap <buffer> <Leader>re :LspRename <CR>
 
 " ~~~Clang config~~~
 nnoremap <C-j> :ClangFormat<CR>
-let g:clang_format#style_options = {
-\ 'BasedOnStyle': 'LLVM',
-\ 'IndentWidth': 4,
-\ 'ColumnLimit': 80,
-\ 'BreakBeforeBraces': 'Allman',
-\ }
+vnoremap = :!clang-format<CR>
+" let g:clang_format#style_options = {
+" \ 'BasedOnStyle': 'LLVM',
+" \ 'IndentWidth': 4,
+" \ 'ColumnLimit': 80,
+" \ 'BreakBeforeBraces': 'Allman',
+" \ }
 
 
 " ~~~nerdcommenter config~~~
@@ -274,6 +270,14 @@ let g:NERDCustomDelimiters = {
     \ 'java': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'python': { 'left': '#', 'leftAlt': '"""', 'rightAlt': '"""' },
     \ }
+
+
+" ~~~Leaderf config~~~
+noremap <C-k> :Leaderf function<CR>
+noremap <C-f> :Leaderf file<CR>
+let g:Lf_WindowPosition = 'popup'
+
+
 
 " Macros ======================================================================================================
 

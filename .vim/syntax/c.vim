@@ -1,10 +1,11 @@
-" syntax match FunctionName "\<[a-zA-Z_]\w*\ze\s*("
-highlight FunctionName ctermfg=Green guifg=Green
+" Match pointer operators
+syntax match cPointerOperator "\.\|\(->\)\|\&\|\*" containedin=cStructMember
+highlight cPointerOperator ctermfg=Cyan guifg=#00d9ff
 
-" Opérateurs
-syntax match cOperator "[+\-*/%<>=!&|^~]"
-highlight cOperator ctermfg=Yellow guifg=Yellow
+" Match struct members and pointed elements
+syntax match cStructMember "\(\.\|\(->\)\)\s*\w*" containedin=cPointerOperator
+highlight cStructMember guifg=#3495ad
 
 
-" syntax match cArrow "->\s*\zs\w\+"
-highlight cArrow ctermfg=DarkMagenta guifg=#491296
+syn match cUserFunction "\<\h\w*\>\(\s\|\n\)*("me=e-1
+hi def link cUserFunction Function
