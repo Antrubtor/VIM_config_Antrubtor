@@ -33,22 +33,48 @@ Before using this configuration, ensure you have the following installed:
 
 - **JetBrains Mono Nerd Font**: This font (`JetBrainsMonoNerdFontMono-Bold.ttf`) is required for powerline symbols. Find the font file in the repository and install it.
 
+
+## Setup Instructions
+
+1. **Place the `.vimrc` file** in your home directory (`~/.vimrc`).
+
+2. **Place the `.vim/` directory** at the root of your home directory (`~/.vim/`).
+
+3. If the `.vim/` directory already exists, make sure to place the `syntax/` directory inside it, as it contains necessary syntax files for your configuration.
+
+4. After completing these steps, run the following command to install the necessary plugins:
+
+  ```
+   vim +PluginInstall
+  ```
+
 ## Keyboard Shortcuts
 
-- `+`: Resize tabs.
-- `F12`: Toggle ALE (Asynchronous Lint Engine) on/off.
-- `T`: Open a terminal (Ctrl + W, N for normal mode).
-- `Ctrl + T`: Activate NERDTree for file navigation.
-- `F8`: Open Tagbar for tag view.
+### Navigation
+- `T` Open the terminal in vim and `Ctrl + w, N`: change the terminal to normal mode.
+- `Ctrl + t`: Activate NERDTree for file navigation (choose a file and press `t` to open it in a new tab).
+- `Ctrl + Up/Down Arrow`: Change buffer.
+- `Ctrl + Right/Left Arrow`: Change tab.
+- `Ctrl + g`: Open GDB.
 
-## Custom Commands
+### Editing
+- `Ctrl + j`: Format all code.
+- Select code in visual and `=`: Format the selected portion of code.
+- `,`: Comment / uncomment.
+- `\re`: Rename a variable.
+- `\co`: Show error suggestions.
 
-- `Ctrl + j`: Format the entire code.
-- Select code and use `=` to format the selected part.
-- `F4`: Enable autocompletion.
-- `F5`: Disable autocompletion.
-- Use `:Man <code>` to access man documentation directly in Vim.
-- `F6`: Toggle background/transparent theme.
+### Searching
+- `Ctrl + k`: Find a function (use `Ctrl + J/K` to navigate between results).
+- `Ctrl + f`: Find a file.
+- `Ctrl + Click`: Go to the declaration of a variable or function.
+
+### Utilities
+- `F5`: Enable / disable AutoComplPop.
+- `F6`: Enable / disable the background.
+- `F8`: Open Tagbar.
+- `:Man <code>`: Use man directly in Vim.
+
 
 ## Additional Requirements
 

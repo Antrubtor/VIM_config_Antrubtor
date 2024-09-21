@@ -1,9 +1,10 @@
-" F12 is for ALE enabling/disabling
+" VIMRC by Antrubtor: https://github.com/Antrubtor/VIM_config_Antrubtor
+
 " T is for terminal (crtl + w - N for normal mode)
-" crtl + t is for nerdtree
+" crtl + t is for nerdtree (chose a file and press t to open in new tab)
 " F8 is for tagbar
 
-" C + j for format all code
+" C + j to format all code
 " select and = for format a part of code
 
 " \re to rename a variable
@@ -12,11 +13,11 @@
 " :Man <code> to use man directly in vim
 
 " F6 enable / disable background
+" F5 enable / disable Auto Compl Pop
 
-" , to comment
-" . to uncomment
+" , to comment / uncomment
 
-" crtl + up/down arrwo to change buffer
+" crtl + up/down arrow to change buffer
 " crtl + right/left to arrow changes tabs
 
 " crtl + g to open GDB
@@ -176,15 +177,42 @@ if !exists('g:airline_symbols')
 endif
 
 
-" ~~~VIM LSP config~~~
-" function! s:on_lsp_buffer_enabled() abort
-"     setlocal omnifunc=lsp#complete
-" endfunction
+" ~~~Autocompletion config~~~
+set complete+=kspell,d
+" set shortmess+=c
 
-" augroup lsp_install
-"     au!
-"     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-" augroup END
+" Better completion experience
+
+" ~~~AutoComplPop ACP config~~~
+" Disable ACP at the start
+let g:acp_enableAtStartup = 0
+let g:acp_was_enabled = 0 " Track if ACP was enabled by F5
+
+" Toggle ACP on/off with F5
+function! ToggleACP()
+  if g:acp_enableAtStartup == 1
+    let g:acp_enableAtStartup = 0
+    echo "AutoComplPop Disabled"
+    AcpDisable
+  else
+    let g:acp_enableAtStartup = 1
+    echo "AutoComplPop Enabled"
+    AcpEnable
+  endif
+endfunction
+
+nnoremap <F5> :call ToggleACP()<CR>
+
+" Enter to select in completion menu (still applicable)
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Prevent ACP from interfering with asyncomplete
+autocmd User AsyncCompleteStart if g:acp_enableAtStartup == 1 | let g:acp_was_enabled = 1 | call AcpDisable() | endif
+autocmd User AsyncCompleteStop if g:acp_was_enabled == 1 | call AcpEnable() | let g:acp_was_enabled = 0 | endif
+
+
+
+
 
 " Asyncomplete config
 let g:asyncomplete_auto_popup = 1  " Active le popup automatique des suggestions
@@ -342,7 +370,7 @@ nnoremap T :call OpenAndPlaceTerminalLeft()<CR>
 
 
 " ___Open GDB macro___
-autocmd FileType c,cpp nnoremap <C-g> :Termdebug<CR><C-w>k<C-w>k<C-w>H<CR><C-w>l
+autocmd FileType c,cpp nnoremap <C-g> :Termdebug<CR><C-w>j<C-w>j<C-w>H<C-w>w
 
 
 " ___Background change macro___
