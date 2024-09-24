@@ -108,7 +108,7 @@ Plugin 'mattn/vim-lsp-settings'
 Plugin 'prabirshrestha/asyncomplete.vim' " Autocomplete with lsp
 Plugin 'prabirshrestha/asyncomplete-lsp.vim'
 
-" Plugin 'wakatime/vim-wakatime'
+Plugin 'wakatime/vim-wakatime'
 " Plugin 'vimsence/vimsence'
 " Plugin list end --------------------------------------------------------------------------
 
@@ -355,18 +355,7 @@ nnoremap <C-Down> :bnext <cr>
 
 
 " ___Terminal mode macro___
-
-function! OpenAndPlaceTerminalLeft()
-    " Open the Vim terminal
-    w
-    terminal
-    " Place the terminal on the left
-    wincmd L
-endfunction
-
-
-
-nnoremap T :call OpenAndPlaceTerminalLeft()<CR>
+nnoremap <S-t> :term<CR><C-w>L
 
 
 " ___Open GDB macro___
@@ -388,3 +377,16 @@ function! ToggleBackground()
 endfunction
 
 nnoremap <F6> :call ToggleBackground()<CR>
+
+
+" Allows you to not hold shift for azerty keyboards
+nnoremap à 0
+nnoremap & 1
+nnoremap é 2
+nnoremap " 3
+nnoremap ' 4
+nnoremap ( 5
+nnoremap - 6
+nnoremap è 7
+nnoremap _ 8
+nnoremap ç 9
