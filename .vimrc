@@ -38,7 +38,7 @@ set colorcolumn=80 " Restricted length bar
 set belloff=all " Remove beeping
 set clipboard^=unnamed,unnamedplus " Use clipboard
 set backspace=eol,start,indent " Fix backspace
-set mouse=a " Use mouse everywhere
+set mouse=ni " 'a' to se mouse everywhere
 set linebreak " Wrapping text
 set cursorline " Highlight the line under scheme
 set showmatch " Show parentheses match
@@ -65,6 +65,11 @@ set tabstop=8
 set smartindent
 set autoindent
 set cindent
+
+" Remove message
+set showcmd
+set cmdheight=1
+" autocmd CursorMoved * echon "" | redraw
 
 
 
@@ -339,11 +344,6 @@ nnoremap <expr> <Left> (g:resizing_mode ? '<C-W><' : '<Left>')
 nnoremap <expr> <Down> (g:resizing_mode ? '<C-W>-' : '<Down>')
 nnoremap <expr> <Up> (g:resizing_mode ? '<C-W>+' : '<Up>')
 nnoremap <expr> <Right> (g:resizing_mode ? '<C-W>>' : '<Right>')
-
-" Remove message
-set showcmd
-set cmdheight=1
-autocmd CursorMoved * echon "" | redraw
 
 " Switch tabs with arrow
 nnoremap <C-Left> gT
