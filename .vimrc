@@ -38,7 +38,7 @@ set colorcolumn=80 " Restricted length bar
 set belloff=all " Remove beeping
 set clipboard^=unnamed,unnamedplus " Use clipboard
 set backspace=eol,start,indent " Fix backspace
-set mouse=ni " 'a' to se mouse everywhere
+set mouse=a " Set mouse everywhere
 set linebreak " Wrapping text
 set cursorline " Highlight the line under scheme
 set showmatch " Show parentheses match
